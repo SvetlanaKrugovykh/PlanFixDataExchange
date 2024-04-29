@@ -10,7 +10,7 @@ module.exports = (fastify, _opts, done) => {
     preHandler: [
       //isAuthorizedGuard
     ],
-    //schema: dataExchangeSchema
+    schema: dataExchangeSchema
   })
 
   done()

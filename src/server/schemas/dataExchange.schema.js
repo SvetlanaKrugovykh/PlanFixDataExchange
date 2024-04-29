@@ -12,8 +12,8 @@ module.exports = {
   body: {
     type: 'object',
     properties: {
-      ipAddresses: { type: 'array' },
-      vlanId: { type: 'string' }
+      reqType: { type: 'string' },
+      text: { type: 'string' }
     },
     required: ['reqType', 'text']
   },
