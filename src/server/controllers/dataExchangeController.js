@@ -4,15 +4,14 @@ const { sendReqToDB } = require('../services/dataExchangeService')
 
 module.exports.getDataFromDB = async function (request, _reply) {
   const { reqType, text } = request.body
-  const message = await sendReqToDB(reqType, text)
-  const unescapedString = message.replace(/\\"/g, '"').replace(/\\\\/g, '\\').replace(/\\r\\n/g, '\n')
+  const answer = await sendReqToDB(reqType, text)
 
-  if (!message) {
+  if (!answer) {
     throw new HttpError[501]('Command execution failed')
   }
 
   return {
-    unescapedString
+    answer
   }
 }
 

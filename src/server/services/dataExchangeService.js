@@ -24,7 +24,9 @@ module.exports.sendReqToDB = async function (reqType, text) {
       console.log(response.status)
       return null
     } else {
-      return response.data
+      let dataString = response.data
+      let jsonObject = JSON.parse(dataString).ResponseArray
+      return jsonObject
     }
 
   } catch (err) {
