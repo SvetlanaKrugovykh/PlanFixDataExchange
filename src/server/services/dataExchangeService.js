@@ -2,9 +2,15 @@ const axios = require(`axios`)
 const URL = process.env.URL
 const AUTH_TOKEN = process.env.AUTH_TOKEN
 
-module.exports.sendReqToDB = async function (reqType, text) {
+module.exports.sendReqToDB = async function (reqType, text, employeesFIOArray) {
 
-  let dataString = text
+  let employeesString
+  if (typeof employeesFIOArray !== 'undefined' && employeesFIOArray.length > 0) {
+    employeesString = ';' + employeesFIOArray.join(';')
+  } else {
+    employeesString = ''
+  }
+  let dataString = text + employeesString
   console.log(dataString)
 
   try {
