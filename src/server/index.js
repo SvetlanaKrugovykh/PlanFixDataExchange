@@ -16,5 +16,6 @@ const app = Fastify({
 
 app.register(authPlugin)
 app.register(require('./routes/dataExchange.route'), { prefix: '/api/v1' })
+app.register(require('./routes/auth.route'), { prefix: '/api' })
 
 module.exports = { app }

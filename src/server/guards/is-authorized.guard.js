@@ -1,7 +1,11 @@
 const HttpError = require('http-errors')
+const jwt = require('jsonwebtoken')
+const { getSecretKey } = require('../guards/getCredentials')
 
 module.exports = function (request, _reply, done) {
-  if (!request.auth.clientId) {
+  const secretKey = getSecretKey()
+  const data = jwt.verify(request.auth.token, secretKey)
+  if (!data.clientId) {
     throw new HttpError.Unauthorized('Authorization required')
   }
 

@@ -8,7 +8,7 @@ module.exports = (fastify, _opts, done) => {
     url: '/planfix-data-exchange/get-data/',
     handler: dataExchangeController.getDataFromDB,
     preHandler: [
-      //isAuthorizedGuard
+      isAuthorizedGuard
     ],
     schema: dataExchangeSchema
   })
