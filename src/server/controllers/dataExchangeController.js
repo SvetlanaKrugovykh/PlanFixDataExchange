@@ -26,7 +26,7 @@ module.exports.getDataFromDB = async function (request, _reply) {
     answer = await readFromFile()
   }
 
-  const SLICE_SIZE = process.env.SLICE_SIZE || 50
+  const SLICE_SIZE = Number(process.env.SLICE_SIZE) || 50
   const startIndex = offset || 0
   const endIndex = startIndex + SLICE_SIZE
   responseData = {
