@@ -6,7 +6,7 @@ require('dotenv').config()
 
 const TEMP_CATALOG = process.env.TEMP_CATALOG || path.join(__dirname, '..', '..', 'temp')
 
-module.exports.getDataFromDB = async function (request, _reply) {
+module.exports.getDataFromDB = async function (request, reply) {
   const { reqType, text, offset } = request.body
   const employeesFIOArray = request.body?.employeesFIOArray
 
@@ -17,6 +17,10 @@ module.exports.getDataFromDB = async function (request, _reply) {
     answer = await sendReqToDB(reqType, text, employeesFIOArray)
     if (!answer) {
       throw new HttpError[501]('Command execution failed')
+    }
+    if (typeof answer === 'string') {
+      reply.header('Content-Type', 'application/json; charset=utf-8')
+      return { message: answer }
     }
     if (offset === undefined) {
       return answer
