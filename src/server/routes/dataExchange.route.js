@@ -12,6 +12,15 @@ module.exports = (fastify, _opts, done) => {
     ],
     schema: dataExchangeSchema
   })
+  fastify.route({
+    method: 'POST',
+    url: '/planfix-data-exchange/employees/status-change',
+    handler: dataExchangeController.getStatusChanges,
+    preHandler: [
+      isAuthorizedGuard
+    ],
+    schema: dataExchangeSchema
+  })
 
   done()
 }

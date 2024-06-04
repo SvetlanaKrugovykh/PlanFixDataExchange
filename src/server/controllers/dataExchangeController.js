@@ -42,9 +42,45 @@ module.exports.getDataFromDB = async function (request, reply) {
   return { answer: responseData }
 }
 
-function readFromFile() {
+
+module.exports.getStatusChanges = async function (request, reply) {
+  const { reqType, text, offset } = request.body
+  const employeesFIOArray = request.body?.employeesFIOArray
+
+  let answer
+  let responseData
+
+  if (offset === undefined || offset === 0) {
+    answer = await sendReqToDB(reqType, text, employeesFIOArray)
+    if (!answer) {
+      throw new HttpError[501]('Command execution failed')
+    }
+    if (typeof answer === 'string') {
+      reply.header('Content-Type', 'application/json; charset=utf-8')
+      return { message: answer }
+    }
+    if (offset === undefined) {
+      return answer
+    }
+    await writeToTempFile(answer, 'status-change')
+  } else {
+    answer = await readFromFile('statusChange')
+  }
+
+  const SLICE_SIZE = Number(process.env.SLICE_SIZE) || 50
+  const startIndex = offset || 0
+  const endIndex = startIndex + SLICE_SIZE
+  responseData = {
+    hired_employees: answer.hired_employees.slice(startIndex, endIndex),
+    dimissed_employees: answer.dimissed_employees.slice(startIndex, endIndex)
+  }
+
+  return { answer: responseData }
+}
+
+function readFromFile(fileName = 'tempData') {
   try {
-    const fileFullName = `${TEMP_CATALOG}tempData.json`
+    const fileFullName = `${TEMP_CATALOG}${fileName}.json`
     const data = fs.readFileSync(fileFullName, 'utf8')
     return JSON.parse(data)
   } catch (error) {
@@ -53,11 +89,11 @@ function readFromFile() {
   }
 }
 
-async function writeToTempFile(data) {
+async function writeToTempFile(data, fileName = 'tempData') {
   try {
     if (!fs.existsSync(TEMP_CATALOG)) fs.mkdirSync(TEMP_CATALOG, { recursive: true })
 
-    const fileFullName = `${TEMP_CATALOG}tempData.json`
+    const fileFullName = `${TEMP_CATALOG}${fileName}.json`
 
     const fileDescriptor = fs.openSync(fileFullName, 'w');
     try {
