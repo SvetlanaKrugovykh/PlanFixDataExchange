@@ -8,13 +8,13 @@ const TEMP_CATALOG = process.env.TEMP_CATALOG || path.join(__dirname, '..', '..'
 
 module.exports.getDataFromDB = async function (request, reply) {
   const { reqType, text, offset } = request.body
-  const employeesFIOArray = request.body?.employeesFIOArray
+  const individualCodesArray = request.body?.individualCodesArray
 
   let answer
   let responseData
 
   if (offset === undefined || offset === 0) {
-    answer = await sendReqToDB(reqType, text, employeesFIOArray)
+    answer = await sendReqToDB(reqType, text, individualCodesArray)
     if (!answer) {
       throw new HttpError[501]('Command execution failed')
     }
@@ -45,13 +45,13 @@ module.exports.getDataFromDB = async function (request, reply) {
 
 module.exports.getStatusChanges = async function (request, reply) {
   const { reqType, text, offset } = request.body
-  const employeesFIOArray = request.body?.employeesFIOArray
+  const individualCodesArray = request.body?.individualCodesArray
 
   let answer
   let responseData
 
   if (offset === undefined || offset === 0) {
-    answer = await sendReqToDB(reqType, text, employeesFIOArray)
+    answer = await sendReqToDB(reqType, text, individualCodesArray)
     if (!answer) {
       throw new HttpError[501]('Command execution failed')
     }
