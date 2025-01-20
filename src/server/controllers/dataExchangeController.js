@@ -11,7 +11,7 @@ module.exports.getDataFromDB = async function (request, reply) {
   const individualCodesArray = request.body?.individualCodesArray
 
   let answer
-  let responseData
+  const responseData = {}
 
   if (offset === undefined || offset === 0) {
     answer = await sendReqToDB(reqType, text, individualCodesArray)
@@ -33,12 +33,10 @@ module.exports.getDataFromDB = async function (request, reply) {
   const SLICE_SIZE = Number(process.env.SLICE_SIZE) || 50
   const startIndex = offset || 0
   const endIndex = startIndex + SLICE_SIZE
-  responseData = {
-    subdivisions: answer.subdivisions.slice(startIndex, endIndex),
-    positions: answer.positions.slice(startIndex, endIndex),
-    employees: answer.employees.slice(startIndex, endIndex)
-  }
 
+  if (answer.subdivisions) responseData.subdivisions = answer.subdivisions.slice(startIndex, endIndex)
+  if (answer.positions) responseData.positions = answer.positions.slice(startIndex, endIndex)
+  if (answer.employees) responseData.employees = answer.employees.slice(startIndex, endIndex)
   return { answer: responseData }
 }
 
